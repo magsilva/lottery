@@ -11,36 +11,36 @@ import java.util.Set;
 public class Megasena
 {
 	private Set<Integer> allottedNumbers;
-	
+
 	private Map<String, List<Set<Integer>>> bets;
-	
+
 	public Megasena()
 	{
 		allottedNumbers = new HashSet<Integer>();
 		bets = new HashMap<String, List<Set<Integer>>>();
 	}
-	
+
 	public void addBet(String name, Integer... numbers)
 	{
 		addBet(name, toSet(numbers));
 	}
-	
+
 	public void addBet(String name, Set<Integer> numbers)
 	{
 		if (name == null) {
 			throw new IllegalArgumentException();
 		}
-		
+
 		List<Set<Integer>> nameBets = null;
 		if (! bets.containsKey(name)) {
 			nameBets = new ArrayList<Set<Integer>>();
 			bets.put(name, nameBets);
 		}
-		
+
 		nameBets = bets.get(name);
 		nameBets.add(numbers);
 	}
-	
+
 	public void setAllottedNumbers(Set<Integer> numbers)
 	{
 		this.allottedNumbers = numbers;
@@ -51,7 +51,7 @@ public class Megasena
 		setAllottedNumbers(toSet(numbers));
 	}
 
-	
+
 	public void getResults()
 	{
 		Map<String, List<Set<Integer>>> betResults = new HashMap<String, List<Set<Integer>>>();
@@ -78,7 +78,27 @@ public class Megasena
 			}
 		}
 	}
-	
+
+	public void getBestResult()
+	{
+		Iterator<String> i = bets.keySet().iterator();
+		Set<Integer> luckyBet = new HashSet<Integer>();
+		while (i.hasNext()) {
+			String name = i.next();
+			Iterator<Set<Integer>> j = bets.get(name).iterator();
+			while (j.hasNext()) {
+				Set<Integer> horrayNumbers = new HashSet<Integer>(j.next());
+				luckyBet.addAll(horrayNumbers);
+			}
+		}
+
+		System.out.print("\n\tDifferent numbers choosen: " + luckyBet.size());
+		luckyBet.retainAll(allottedNumbers);
+		System.out.print("\n\tBest possible result: " + luckyBet.size());
+
+	}
+
+
 	private Set<Integer> toSet(Integer... numbers)
 	{
 		Set<Integer> set = new HashSet<Integer>();
